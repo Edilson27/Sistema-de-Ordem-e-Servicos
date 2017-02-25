@@ -5,6 +5,10 @@
  */
 package br.com.infox.telas;
 
+import java.text.DateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author LEE
@@ -45,6 +49,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("X - Sistema para controle de OS");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         javax.swing.GroupLayout DesktopLayout = new javax.swing.GroupLayout(Desktop);
         Desktop.setLayout(DesktopLayout);
@@ -91,6 +100,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         menuAjuSobre.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.ALT_MASK));
         menuAjuSobre.setText("Sobre");
+        menuAjuSobre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAjuSobreActionPerformed(evt);
+            }
+        });
         menuAjuda.add(menuAjuSobre);
 
         jMenuBar1.add(menuAjuda);
@@ -142,8 +156,25 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuOpSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpSairActionPerformed
-        // TODO add your handling code here:
+        // exibir uma caixa de dialogo
+        int sair = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja sair?", "Atenção!", JOptionPane.YES_NO_OPTION);
+        if(sair == JOptionPane.YES_OPTION){
+            System.exit(0);
+        }
     }//GEN-LAST:event_menuOpSairActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        // substitue a variavel lblData pela data atual ao iniciar o form
+        Date data = new Date();
+        DateFormat formatador = DateFormat.getDateInstance(DateFormat.SHORT);
+        lblData.setText(formatador.format(data));
+    }//GEN-LAST:event_formWindowActivated
+
+    private void menuAjuSobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAjuSobreActionPerformed
+        //
+        TelaSobre sobre = new TelaSobre();
+        sobre.setVisible(true);
+    }//GEN-LAST:event_menuAjuSobreActionPerformed
 
     /**
      * @param args the command line arguments
