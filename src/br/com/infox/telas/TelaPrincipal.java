@@ -84,11 +84,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         menuCadUsuarios.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_MASK));
         menuCadUsuarios.setText("Usuários");
+        menuCadUsuarios.setEnabled(false);
         menuCadastro.add(menuCadUsuarios);
 
         jMenuBar1.add(menuCadastro);
 
         menuRelatorio.setText("Relatório");
+        menuRelatorio.setEnabled(false);
 
         menuRelServico.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK));
         menuRelServico.setText("Serviços");
@@ -134,7 +136,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblUsuario)
                     .addComponent(lblData))
-                .addGap(0, 99, Short.MAX_VALUE))
+                .addGap(0, 134, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -215,16 +217,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JDesktopPane Desktop;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel lblData;
-    private javax.swing.JLabel lblUsuario;
+    public static javax.swing.JLabel lblUsuario;
     private javax.swing.JMenuItem menuAjuSobre;
     private javax.swing.JMenu menuAjuda;
     private javax.swing.JMenuItem menuCadCliente;
     private javax.swing.JMenuItem menuCadOs;
-    private javax.swing.JMenuItem menuCadUsuarios;
+    public static javax.swing.JMenuItem menuCadUsuarios;
     private javax.swing.JMenu menuCadastro;
     private javax.swing.JMenuItem menuOpSair;
     private javax.swing.JMenu menuOpcoes;
     private javax.swing.JMenuItem menuRelServico;
-    private javax.swing.JMenu menuRelatorio;
+    public static javax.swing.JMenu menuRelatorio;
     // End of variables declaration//GEN-END:variables
 }

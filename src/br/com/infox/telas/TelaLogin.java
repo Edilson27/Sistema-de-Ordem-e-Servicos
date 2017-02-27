@@ -1,40 +1,57 @@
-
 package br.com.infox.telas;
 
 import java.sql.*;
 import br.com.infox.dal.ModuloConexao;
+import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+
 /**
  *
  * @author LEE
  */
 public class TelaLogin extends javax.swing.JFrame {
+
     Connection conexao = null;
     PreparedStatement pst = null;
     ResultSet rs = null;
-    
-    public void logar(){
+
+    public void logar() {
         String sql = "select * from tbusuarios where login=? and  senha=?";
         try {
-         //preparam a consulta ao banco em funçao do que foi digitado nas caixas de texto. O ? substitui
-         //pelo o conteúdo  das variáveis
-         pst = conexao.prepareStatement(sql);
-         pst.setString(1, txtUsuario.getText());
-         pst.setString(2, txtSenha.getText());
-         //executa a query
-         rs = pst.executeQuery();
-         //se existir usuario e senha correspondente
-         if(rs.next()){
-             TelaPrincipal principal = new TelaPrincipal();
-             principal.setVisible(true);
-             this.dispose();
-             conexao.close();
-         } else{
-             JOptionPane.showMessageDialog(null, "usúario e/ou senha inválido(s)!");
-         }
-         
-        } catch(Exception e){
+            //preparam a consulta ao banco em funçao do que foi digitado nas caixas de texto. O ? substitui
+            //pelo o conteúdo  das variáveis
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, txtUsuario.getText());
+            pst.setString(2, txtSenha.getText());
+            //executa a query
+            rs = pst.executeQuery();
+            //se existir usuario e senha correspondente
+            if (rs.next()) {
+                //obtem o conteudo do campo pergil
+                String perfil = rs.getString(6);
+                //System.out.println(perfil);
+                //a estrutura abaixo faz o tratamento do perfil do usuario
+                if (perfil.equals("admin")) {
+                    TelaPrincipal principal = new TelaPrincipal();
+                    principal.setVisible(true);
+                    TelaPrincipal.menuRelatorio.setEnabled(true);//habilita o menu Relatorio
+                    TelaPrincipal.menuCadUsuarios.setEnabled(true); //habilita o submenu Cadastro de usuarios
+                    TelaPrincipal.lblUsuario.setText(rs.getString(2));
+                    TelaPrincipal.lblUsuario.setForeground(Color.red);
+                    this.dispose();
+                } else {
+                    TelaPrincipal principal = new TelaPrincipal();
+                    principal.setVisible(true);
+                    TelaPrincipal.lblUsuario.setText(rs.getString(2));
+                    this.dispose();
+                }
+                conexao.close();
+            } else {
+                JOptionPane.showMessageDialog(null, "usúario e/ou senha inválido(s)!");
+            }
+
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
     }
@@ -46,10 +63,10 @@ public class TelaLogin extends javax.swing.JFrame {
         initComponents();
         conexao = ModuloConexao.conector();
         System.out.println(conexao);
-        
-        if(conexao != null){
+
+        if (conexao != null) {
             lblStatus.setIcon(new ImageIcon(getClass().getResource("/br/com/infox/icones/dbok.png")));
-                    
+
         } else {
             lblStatus.setIcon(new ImageIcon(getClass().getResource("/br/com/infox/icones/dberror.png")));
         }
@@ -133,7 +150,7 @@ public class TelaLogin extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         //chama o metodo logar
-        logar();        
+        logar();
     }//GEN-LAST:event_btnLoginActionPerformed
 
     /**
