@@ -74,6 +74,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         menuCadCliente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
         menuCadCliente.setText("Cliente");
+        menuCadCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCadClienteActionPerformed(evt);
+            }
+        });
         menuCadastro.add(menuCadCliente);
 
         menuCadOs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.ALT_MASK));
@@ -187,6 +192,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
         usuario.setVisible(true);
         Desktop.add(usuario);
     }//GEN-LAST:event_menuCadUsuariosActionPerformed
+
+    private void menuCadClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadClienteActionPerformed
+        // TODO add your handling code here:
+        TelaCliente cliente = new TelaCliente();
+        cliente.setVisible(true);
+        Desktop.add(cliente);
+    }//GEN-LAST:event_menuCadClienteActionPerformed
 
     /**
      * @param args the command line arguments

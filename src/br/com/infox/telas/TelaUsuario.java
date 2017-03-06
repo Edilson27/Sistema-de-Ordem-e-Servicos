@@ -48,6 +48,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         }
     }
 
+    //Metodo Adicionar
     public void adicionar() {
         String sql = "insert into tbusuarios(iduser, usuario, fone, login, senha, perfil) values(?,?,?,?,?,?)";
 
