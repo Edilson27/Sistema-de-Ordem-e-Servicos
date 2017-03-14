@@ -1,4 +1,3 @@
-
 package br.com.infox.telas;
 
 import java.sql.*;
@@ -6,31 +5,42 @@ import br.com.infox.dal.ModuloConexao;
 import javax.swing.JOptionPane;
 //a linha abaixo importa recursos da biblioteca rs2xml.jar
 import net.proteanit.sql.DbUtils;
+
 /**
  *
  * @author LEE
  */
 public class TelaCliente extends javax.swing.JInternalFrame {
+
     Connection conexao = null;
     PreparedStatement pst = null;
     ResultSet rs = null;
-    
-    /** Creates new form TelaCliente */
+
+    /**
+     * Creates new form TelaCliente
+     */
     public TelaCliente() {
         initComponents();
         conexao = ModuloConexao.conector();
     }
-    
+
     //Metodo para adicionar cliente
-     public void adicionar() {
+    public void adicionar() {
+        //String sql = "insert into tbclientes(idcli, nomecli, endcli, fonecli, email) values(?,?,?,?,?)";
+        //Crio que o erro está nos campos email null e unique --------------------------------
         String sql = "insert into tbclientes(nomecli, endcli, fonecli, email) values(?,?,?,?)";
 
         try {
             pst = conexao.prepareStatement(sql);
+            //pst.setString(1, txtCliId.getText());
             pst.setString(1, txtCliNome.getText());
             pst.setString(2, txtCliEndereco.getText());
             pst.setString(3, txtCliTelefone.getText());
             pst.setString(4, txtCliEmail.getText());
+
+            if (txtCliEmail.getText().isEmpty()) {
+                pst.setString(4, null);
+            }
 
             //validacao dos campos obrigatorios
             if ((txtCliNome.getText().isEmpty()) || (txtCliTelefone.getText().isEmpty())) {
@@ -46,46 +56,46 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                     txtCliNome.setText(null);
                     txtCliEndereco.setText(null);
                     txtCliTelefone.setText(null);
-                    txtCliEmail.setText(null);                   
+                    txtCliEmail.setText(null);
                 }
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
+            System.out.println("ERRO ao Cadastrar.....");
         }
     }
-     
-     //metodo pesquisar clientes
-     private void pesquisar_cliente(){
-         String sql = "select * from tbclientes where nomecli like ?";
-         try {
-             pst = conexao.prepareStatement(sql);
-             //passando o conteudo da caixa de pesquisa para o ?
-             //atençao ao "%" - continuação da String sql
-             pst.setString(1, txtCliPesquisar.getText() + "%");
-             rs = pst.executeQuery();
-             //a linha abaixo usa a biblioteca rs2xml.jar para preencher a tabela
-             tblClientes.setModel(DbUtils.resultSetToTableModel(rs));
-             
-             
-         } catch (Exception e) {
-             JOptionPane.showMessageDialog(null, e);
-         }
-     }
-     
-     //metodo para setar os campos do formulario com o conteudo da tabela
-     public void setar_campos(){
-         int setar = tblClientes.getSelectedRow();
-         txtCliId.setText(tblClientes.getModel().getValueAt(setar, 0).toString());
-         txtCliNome.setText(tblClientes.getModel().getValueAt(setar, 1).toString());
-         txtCliEndereco.setText(tblClientes.getModel().getValueAt(setar, 2).toString());
-         txtCliTelefone.setText(tblClientes.getModel().getValueAt(setar, 3).toString());
-         txtCliEmail.setText(tblClientes.getModel().getValueAt(setar, 4).toString());
-         
-         //a linha abaixo bloqueia o botao Adicionar
-         btnCliAdicionar.setEnabled(false);
-     }
-     
-     //metodo para alterar a tabela cliente
+
+    //metodo pesquisar clientes
+    private void pesquisar_cliente() {
+        String sql = "select * from tbclientes where nomecli like ?";
+        try {
+            pst = conexao.prepareStatement(sql);
+            //passando o conteudo da caixa de pesquisa para o ?
+            //atençao ao "%" - continuação da String sql
+            pst.setString(1, txtCliPesquisar.getText() + "%");
+            rs = pst.executeQuery();
+            //a linha abaixo usa a biblioteca rs2xml.jar para preencher a tabela
+            tblClientes.setModel(DbUtils.resultSetToTableModel(rs));
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
+    //metodo para setar os campos do formulario com o conteudo da tabela
+    public void setar_campos() {
+        int setar = tblClientes.getSelectedRow();
+        txtCliId.setText(tblClientes.getModel().getValueAt(setar, 0).toString());
+        txtCliNome.setText(tblClientes.getModel().getValueAt(setar, 1).toString());
+        txtCliEndereco.setText(tblClientes.getModel().getValueAt(setar, 2).toString());
+        txtCliTelefone.setText(tblClientes.getModel().getValueAt(setar, 3).toString());
+        txtCliEmail.setText(tblClientes.getModel().getValueAt(setar, 4).toString());
+
+        //a linha abaixo bloqueia o botao Adicionar
+        btnCliAdicionar.setEnabled(false);
+    }
+
+    //metodo para alterar a tabela cliente
     private void alterar() {
         String sql = "update tbclientes set nomecli=?,endcli=?,fonecli=?,email=? where idcli=?";
 
@@ -112,10 +122,10 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                     txtCliEndereco.setText(null);
                     txtCliTelefone.setText(null);
                     txtCliEmail.setText(null);
-                    
+
                     btnCliAdicionar.setEnabled(true);
                     txtCliId.setText(null);
-                    
+
                     //cdoUsuPerfil.setSelectedItem(null);
                 }
             }
@@ -124,13 +134,12 @@ public class TelaCliente extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-    
+
     //metodo responsavel pela remoçao do cliente
-     private void remover() {
+    private void remover() {
         if (txtCliId.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Campo ID vazio!");
-        } 
-        //COMO FAZER A EXCLUSAO NA TABELA APENAS SE HOUVER DADOS CADASTRADOS ?
+        } //COMO FAZER A EXCLUSAO NA TABELA APENAS SE HOUVER DADOS CADASTRADOS ?
         else {
             //a estrutura abaixo confirma a remocao do usuario
             int confirmacao = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja remover este cliente?", "Atenção!", JOptionPane.YES_NO_OPTION);
@@ -158,11 +167,10 @@ public class TelaCliente extends javax.swing.JInternalFrame {
 
     }
 
-
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -343,8 +351,8 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                     .addComponent(txtCliEmail)
                     .addComponent(jLabel5))
                 .addGap(38, 38, 38)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCliAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnCliAdicionar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCLiAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCliExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(118, 118, 118))
