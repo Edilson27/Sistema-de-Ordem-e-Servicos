@@ -77,6 +77,7 @@ public class TelaOs extends javax.swing.JInternalFrame {
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
+            System.out.println(e);
         }
     }
     
@@ -122,6 +123,48 @@ public class TelaOs extends javax.swing.JInternalFrame {
         } catch(Exception e2){
             JOptionPane.showMessageDialog(null, e2);
         }
+    }
+    
+    //metodo alterar OS
+    private void alterar_os(){
+        String sql = "update tbos set tipo=?, situacao=?, equipamento=?, defeito=?, servico=?, tecnico=?, valor=? where os=?";
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, tipo);
+            pst.setString(2, cboOsSituacao.getSelectedItem().toString());
+            pst.setString(3, txtOsEquipamento.getText());
+            pst.setString(4, txtOsDefeito.getText());
+            pst.setString(5, txtOsServico.getText());
+            pst.setString(6, txtOsTecnico.getText());
+            //metodo replace permiti usar ponto e também virgula para o campo valor
+            pst.setString(7, txtOsValor.getText().replace(",", "."));
+            pst.setString(8, txtOs.getText());
+
+            //validacao dos campos obrigatórios            
+            if ((txtOsEquipamento.getText().isEmpty()) || (txtCliID.getText().isEmpty()) || (txtOsDefeito.getText().isEmpty())) {
+                JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
+            } else {
+                int adicionado = pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "OS alterda com sucesso!");
+                if (adicionado > 0) {
+                    txtOs.setText(null);
+                    txtData.setText(null);
+                    txtCliID.setText(null);
+                    txtOsEquipamento.setText(null);
+                    txtOsDefeito.setText(null);
+                    txtOsServico.setText(null);
+                    txtOsTecnico.setText(null);
+                    txtOsValor.setText(null);
+                    //habilitando os campos desativados
+                    btnOSAdicionar.setEnabled(true);
+                    txtCliPesquisar.setEnabled(true);
+                    tblClientes.setVisible(true);
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        } 
     }
 
     /**
@@ -263,7 +306,7 @@ public class TelaOs extends javax.swing.JInternalFrame {
 
         jLabel3.setText("Situação");
 
-        cboOsSituacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Na bancada", "Entrega OK", "Orçamento REPROVADO", "Aguardando Reprovação", "Aguardando Peças", "Abandonado pelo o cliente", "Retornou" }));
+        cboOsSituacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Na bancada", "Entrega OK", "Orçamento REPROVADO", "Aguardando Aprovação", "Aguardando Peças", "Abandonado pelo o cliente", "Retornou" }));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Cliente"));
 
@@ -366,6 +409,11 @@ public class TelaOs extends javax.swing.JInternalFrame {
         btnOSAtualizar.setToolTipText("Atualizar");
         btnOSAtualizar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnOSAtualizar.setPreferredSize(new java.awt.Dimension(80, 80));
+        btnOSAtualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOSAtualizarActionPerformed(evt);
+            }
+        });
 
         btnOSExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/delete.png"))); // NOI18N
         btnOSExcluir.setToolTipText("Excluir");
@@ -523,6 +571,11 @@ public class TelaOs extends javax.swing.JInternalFrame {
         // chama o metodo pesquisar Ordem e Serviços
         pesquisar_os();
     }//GEN-LAST:event_btnOSPesquizarActionPerformed
+
+    private void btnOSAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOSAtualizarActionPerformed
+        // 
+        alterar_os();
+    }//GEN-LAST:event_btnOSAtualizarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
